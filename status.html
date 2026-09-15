@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>충전기 현황 · CPO 정보방</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+<body data-page="status">
+  <header class="app-header" id="app-header"></header>
+  <main class="wrap">
+    <div class="kicker">Network desk</div>
+    <h1>전기차충전기 현황 검색</h1>
+    <p class="lede">지역·사업자·속도·상태로 충전소를 걸러 봅니다. 아래 목록은 학습·기획용 샘플이며, 실시간 전국 현황은 무공해차 누리집·공공데이터 API를 쓰는 것이 맞습니다.</p>
+    <form id="status-search">
+      <div class="filters">
+        <input class="field" id="st-q" type="search" placeholder="충전소명, 주소, 사업자, CCS2…" />
+        <select id="st-region"></select>
+        <select id="st-operator"></select>
+        <select id="st-speed">
+          <option value="all">속도 전체</option>
+          <option>완속</option>
+          <option>급속</option>
+          <option>초급속</option>
+        </select>
+      </div>
+      <div class="filters" style="grid-template-columns:1fr 1fr">
+        <select id="st-status">
+          <option value="all">상태 전체</option>
+          <option>충전가능</option>
+          <option>충전중</option>
+          <option>점검중</option>
+          <option>통신이상</option>
+        </select>
+        <button class="btn" type="submit">현황 검색</button>
+      </div>
+    </form>
+    <div class="section-head">
+      <h2>충전소</h2>
+      <span class="muted" id="st-count"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>충전소</th><th>지역</th><th>사업자</th><th>속도</th><th>커넥터</th><th>상태</th><th>메모</th>
+          </tr>
+        </thead>
+        <tbody id="st-body"></tbody>
+      </table>
+    </div>
+    <div class="section-head"><h2>주요 사업자 맵</h2></div>
+    <div class="grid" id="operator-cards"></div>
+  </main>
+  <p class="footer">상태값(충전가능/충전중/점검중/통신이상)은 샘플입니다. 공식 실시간 정보는 출처 페이지를 이용하세요.</p>
+  <script src="./data/content.js?v=3"></script>
+  <script src="./js/search.js?v=3"></script>
+  <script src="./js/app.js?v=3"></script>
+</body>
+</html>

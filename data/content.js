@@ -1,0 +1,584 @@
+window.CPO_DATA = {
+  updated: "2026-09",
+  stats: [
+    {
+      label: "국내 공용 충전기 규모",
+      value: "성장 국면",
+      note: "급속·초급속 비중이 늘고 완속(아파트·직장)이 대수를 이끕니다. 최신 대수는 환경부·무공해차 누리집에서 확인하세요."
+    },
+    {
+      label: "CPO가 챙길 핵심",
+      value: "가동률 · 전력 · 로밍",
+      note: "설치 대수보다 실제 충전량, 고장 대응, 한전 계약전력, 로밍 정산이 손익을 가릅니다."
+    },
+    {
+      label: "규제 축",
+      value: "전기사업법 · 환경부",
+      note: "충전사업 등록, 보조금·의무설치, 전기안전·소방이 사업 착수 조건을 만듭니다."
+    },
+    {
+      label: "기술 표준",
+      value: "OCPP · OCPI",
+      note: "충전기-관제(OCPP), 사업자 간 로밍(OCPI 등)이 운영·확장의 기본 골격입니다."
+    }
+  ],
+  learningPath: [
+    { step: "1", title: "역할 구분", text: "CPO(인프라 운영)와 eMSP(운전자 서비스)를 나눕니다. 한 회사가 겸업하는 경우가 많습니다." },
+    { step: "2", title: "규제·등록", text: "전기자동차 충전사업 등록, 보조금 요건, 전기안전관리·소방 기준을 확인합니다." },
+    { step: "3", title: "부지·전력", text: "사이트 호스트, 한전 인입·계약전력·변압기, 특례요금이 투자비의 큰 부분입니다." },
+    { step: "4", title: "설비·표준", text: "완속/급속, CCS2 등 커넥터, OCPP 관제 연동, 계량·결제를 맞춥니다." },
+    { step: "5", title: "운영·로밍", text: "원격감시, SLA, 로밍 정산, 가동률·고장률로 손익을 관리합니다." }
+  ],
+  categories: [
+    { id: "role", name: "사업·역할" },
+    { id: "reg", name: "규제·정책" },
+    { id: "hw", name: "설비·하드웨어" },
+    { id: "power", name: "전력·한전" },
+    { id: "proto", name: "프로토콜·로밍" },
+    { id: "pay", name: "요금·결제" },
+    { id: "ops", name: "운영·지표" }
+  ],
+  glossary: [
+    {
+      id: "cpo",
+      term: "CPO",
+      en: "Charge Point Operator",
+      aliases: ["충전인프라 운영사업자", "충전사업자", "CP operator"],
+      category: "role",
+      summary: "충전기를 설치·소유 또는 위탁받아 관제·유지보수·전력·정산을 책임지는 사업자입니다.",
+      body: "CPO는 충전소(사이트) 단위로 EVSE를 운영합니다. 부지 임대, 한전 수전, 충전기 구매, CSMS 연동, 현장 출동, 로밍 허브 접속이 CPO 업무 범위에 들어갑니다. 한국에서는 전기사업법상 전기자동차 충전사업 등록과 맞물리는 경우가 많습니다.",
+      why: "사업 주체입니다. 누구 명의로 설비를 두고, 누가 관제·정산하는지가 계약·보조금·보험의 출발점입니다."
+    },
+    {
+      id: "emsp",
+      term: "eMSP",
+      en: "e-Mobility Service Provider",
+      aliases: ["EMSP", "모빌리티 서비스", "충전 앱 사업자"],
+      category: "role",
+      summary: "운전자에게 회원, 앱, 요금제, 로밍 결제를 제공하는 서비스 사업자입니다.",
+      body: "충전기 자산을 직접 안 가져도 앱·RFID로 충전 권한을 팔 수 있습니다. 실제 충전이 일어나면 CPO와 로밍 정산을 합니다. 국내 대형 사업자는 CPO+eMSP를 겸하는 경우가 흔합니다.",
+      why: "고객 접점과 브랜드·요금 경쟁이 eMSP 쪽에 있습니다. CPO만 하면 B2B 로밍 매출 비중이 커집니다."
+    },
+    {
+      id: "host",
+      term: "사이트 호스트",
+      en: "Site host",
+      aliases: ["부지 제공자", "입지 파트너", "Host"],
+      category: "role",
+      summary: "주차장·주유소·마트·아파트 등 부지를 제공하는 주체입니다.",
+      body: "호스트는 임대료, 주차 정책, 전기 인입 협조, 안내 표지, 민원 창구를 함께 정합니다. 수익 배분(매출 쉐어 vs 고정 임대)이 계약의 핵심입니다.",
+      why: "좋은 입지가 가동률을 결정합니다. 호스트 이해관계(주차 회전, 집객)를 맞추지 못하면 민원으로 운영이 흔들립니다."
+    },
+    {
+      id: "om",
+      term: "O&M",
+      en: "Operations and Maintenance",
+      aliases: ["위탁운영", "유지보수", "운영관리"],
+      category: "role",
+      summary: "원격관제, 정기점검, 고장 출동, 소모품·커넥터 교체를 수행하는 운영 활동입니다.",
+      body: "자산 소유자(SPC·금융)와 운영사(CPO)를 분리하는 모델에서 O&M 계약과 SLA가 사업의 뼈대입니다.",
+      why: "설치 이후 비용의 대부분입니다. 출동 반경, 부품 재고, 24시간 관제가 고객 이탈을 막습니다."
+    },
+    {
+      id: "csms",
+      term: "CSMS",
+      en: "Charging Station Management System",
+      aliases: ["관제시스템", "충전 관제", "백엔드"],
+      category: "proto",
+      summary: "충전기 상태 감시, 원격 시작/중지, 요금·장애·펌웨어를 다루는 관제 플랫폼입니다.",
+      body: "보통 OCPP로 충전기와 통신합니다. 실시간 상태(가능/충전중/고장), 계량값, 사용자 인증, 스마트충전 스케줄이 CSMS에 모입니다.",
+      why: "다수 사이트를 인력 없이 돌리려면 CSMS가 필수입니다. 기종 호환·OCPP 버전을 구매 전에 검증해야 합니다."
+    },
+    {
+      id: "evse",
+      term: "EVSE",
+      en: "Electric Vehicle Supply Equipment",
+      aliases: ["충전기", "충전설비", "charge point"],
+      category: "hw",
+      summary: "차량에 전력을 공급하는 충전 설비 단위입니다. 한 스테이션에 EVSE가 여러 대일 수 있습니다.",
+      body: "통계·로밍 ID는 보통 EVSE 또는 커넥터 단위로 발급됩니다. ‘충전소 1곳’과 ‘충전기 1기’를 혼동하면 보급 현황 숫자가 엇갈립니다.",
+      why: "투자·보조금·가동률 모두 ‘무엇 1단위인가’를 먼저 합의해야 합니다."
+    },
+    {
+      id: "connector",
+      term: "커넥터",
+      en: "Connector",
+      aliases: ["인렛", "충전구", "플러그"],
+      category: "hw",
+      summary: "차량과 물리적으로 결합하는 충전 단자입니다. 한 EVSE에 커넥터가 둘 이상일 수 있습니다.",
+      body: "국내 급속은 CCS2(콤보)가 주류이고, 일부 CHAdeMO·Tesla(NACS)가 남아 있습니다. 완속은 AC 5핀(완속)이 일반적입니다. 커넥터 파손·오염이 현장 고장의 상당 부분을 차지합니다.",
+      why: "타깃 차량 믹스에 안 맞는 커넥터는 가동률이 바로 떨어집니다."
+    },
+    {
+      id: "ac-slow",
+      term: "완속 충전 (AC)",
+      en: "AC slow charging",
+      aliases: ["AC", "7kW", "11kW", "완속"],
+      category: "hw",
+      summary: "교류로 차량 온보드 충전기에 공급하는 방식. 보통 7kW 전후, 수 시간이 걸립니다.",
+      body: "아파트·직장·거주자 우선 부지에 적합합니다. 대당 투자비와 한전 증설 부담이 급속보다 작습니다. 점유 시간이 길어 주차 정책이 중요합니다.",
+      why: "대수 확대와 심야 전력 활용에 유리합니다. 회전율이 필요한 고속도로·주유소에는 보통 부적합합니다."
+    },
+    {
+      id: "dc-fast",
+      term: "급속·초급속 (DC)",
+      en: "DC fast / HPC",
+      aliases: ["급속", "초급속", "50kW", "100kW", "200kW", "350kW", "HPC"],
+      category: "hw",
+      summary: "직류로 배터리에 직접 넣는 방식. 50kW급부터 200~350kW 초급속까지 있습니다.",
+      body: "출력은 차량 BMS·SOC·온도에 따라 떨어집니다. 한 충전기가  Dual 커넥터로 출력을 나누는 파워셰어링이 흔합니다. 수전 용량과 기본요금이 손익을 좌우합니다.",
+      why: "고속도로·물류·택시 허브의 핵심입니다. 과투자 시 기본요금이 매출을 잡아먹습니다."
+    },
+    {
+      id: "ccs2",
+      term: "CCS2 (Combo)",
+      en: "Combined Charging System Type 2",
+      aliases: ["콤보", "CCS", "IEC 62196"],
+      category: "hw",
+      summary: "국내·유럽 승용 급속의 사실상 표준 커넥터입니다.",
+      body: "AC Type 2 형태에 DC 핀이 결합된 모양입니다. 신차 급속은 대부분 CCS2입니다.",
+      why: "공용 급속 투자 시 기본 사양으로 보는 것이 안전합니다."
+    },
+    {
+      id: "chademo",
+      term: "CHAdeMO",
+      en: "CHAdeMO",
+      aliases: ["차데모"],
+      category: "hw",
+      summary: "일본 중심 DC 급속 규격. 국내 초기 급속에 많이 깔렸습니다.",
+      body: "신차 비중은 줄었지만 잔존 차량·일부 수입차가 있어 듀얼 커넥터로 남는 사이트가 있습니다.",
+      why: "신규 단독 투자는 신중히. 기존 자산 활용·특정 고객군이 있을 때만 의미가 있습니다."
+    },
+    {
+      id: "nacs",
+      term: "NACS",
+      en: "North American Charging Standard",
+      aliases: ["테슬라 커넥터", "Tesla"],
+      category: "hw",
+      summary: "테슬라 북미 표준 커넥터. 국내 테슬라 슈퍼차저는 자체 규격·회원 체계를 씁니다.",
+      body: "공용 CPO 로밍과는 별도 생태계인 경우가 많습니다. 어댑터·개방 정책은 시기별로 달라지니 공식 안내를 확인하세요.",
+      why: "테슬라 트래픽이 큰 입지에서는 별도 전략이 필요합니다."
+    },
+    {
+      id: "ocpp",
+      term: "OCPP",
+      en: "Open Charge Point Protocol",
+      aliases: ["OCPP 1.6", "OCPP 2.0.1"],
+      category: "proto",
+      summary: "충전기와 관제시스템(CSMS) 사이 통신 표준입니다.",
+      body: "국내에는 1.6 JSON이 가장 흔하고, 스마트충전·보안·ISO 15118 연동은 2.0.1 쪽이 유리합니다. ‘OCPP 지원’이라도 벤더 프로파일·커스텀 메시지가 달라 현장 연동 시험이 필요합니다.",
+      why: "기종 잠김(lock-in)을 줄이고, 관제 교체·멀티벤더 운영의 전제입니다."
+    },
+    {
+      id: "ocpi",
+      term: "OCPI",
+      en: "Open Charge Point Interface",
+      aliases: ["로밍 프로토콜"],
+      category: "proto",
+      summary: "CPO와 eMSP 사이 요금·위치·세션 정보를 주고받는 로밍 표준입니다.",
+      body: "허브(중계) 없이 양자 연동하거나, 허브를 거쳐 다대다로 연결합니다.  Tariffs, CDR(충전 상세기록), 실시간 상태가 핵심 객체입니다.",
+      why: "자사 회원만으로는 가동률을 채우기 어렵습니다. 로밍이 ‘남의 고객을 받는’ 채널입니다."
+    },
+    {
+      id: "roaming",
+      term: "로밍",
+      en: "Charging roaming",
+      aliases: ["환경부 로밍", "상호충전", "허브"],
+      category: "proto",
+      summary: "A사 회원 카드·앱으로 B사 충전기에서 충전하고 사후에 정산하는 구조입니다.",
+      body: "국내에는 공공 주도의 상호이용과 민간 허브·양자계약이 공존합니다. 중계수수료, 요금 마크업, 인증 실패, 정산 대사 지연이 실무 이슈입니다.",
+      why: "네트워크 효과입니다. 로밍 미가입 충전기는 지도·앱에서 외면받기 쉽습니다."
+    },
+    {
+      id: "iso15118",
+      term: "ISO 15118 / PnC",
+      en: "Plug and Charge",
+      aliases: ["플러그앤차지", "PnC", "15118"],
+      category: "proto",
+      summary: "차량과 충전기가 인증서를 주고받아 케이블만 꽂아도 과금되는 표준입니다.",
+      body: "계약 인증서, TLS, 자동 결제 수단 매핑이 필요합니다. 차량·충전기·백엔드가 모두 지원해야 체감됩니다.",
+      why: "법인 플릿·프리미엄 경험 차별화 포인트. 단기 필수 요건은 아니지만 로드맵에 넣는 사업자가 늘고 있습니다."
+    },
+    {
+      id: "smart-charge",
+      term: "스마트 충전",
+      en: "Smart charging",
+      aliases: ["부하관리", "스케줄 충전", "peak shaving"],
+      category: "proto",
+      summary: "수전 한도·요금 시간대·계통 신호에 맞춰 출력을 조절하는 기능입니다.",
+      body: "OCPP 프로파일, EMS, 한전 DR과 연결됩니다. 아파트 단지 변압기 과부하를 막는 현실적인 수단입니다.",
+      why: "증설 공사 없이 충전기를 더 넣는 방법이자, 기본요금을 줄이는 방법입니다."
+    },
+    {
+      id: "v2g",
+      term: "V2G / V2X",
+      en: "Vehicle to Grid",
+      aliases: ["V2H", "양방향 충전"],
+      category: "proto",
+      summary: "차량 배터리를 건물·계통으로 방전하는 양방향 충전입니다.",
+      body: "하드웨어·요금·배터리 보증·전기사업 이슈가 겹칩니다. 실증·특수 플릿 단계인 경우가 많습니다.",
+      why: "중장기 부가수익 후보입니다. 당장 공용 CPO 주력 상품으로 보기는 이릅니다."
+    },
+    {
+      id: "evse-id",
+      term: "EVSE ID",
+      en: "EVSE identifier",
+      aliases: ["충전기 ID", "충전소 ID"],
+      category: "proto",
+      summary: "로밍·관제에서 설비를 가리키는 고유 번호입니다.",
+      body: "국가코드·사업자코드·설비번호 체계를 쓰는 경우가 많습니다. 지도 앱·민원·정산 대사의 키입니다.",
+      why: "ID가 중복·변경되면 로밍 실패와 이중정산이 납니다."
+    },
+    {
+      id: "elec-law",
+      term: "전기자동차 충전사업",
+      en: "EV charging business (Electric Utility Act)",
+      aliases: ["전기사업법", "충전사업 등록", "전기신사업"],
+      category: "reg",
+      summary: "한국에서 전기차 충전 서비스를 업으로 하려면 관련 등록·신고 체계를 따릅니다.",
+      body: "소유·운영 형태, 요금 공개, 안전관리자, 한전과의 관계에 따라 준비 서류가 달라집니다. 지자체·한전 지역본부 실무 해석을 사업 전에 확인하는 것이 안전합니다.",
+      why: "미등록 운영은 보조금·로밍·금융의 전제가 무너집니다."
+    },
+    {
+      id: "subsidy",
+      term: "충전기 설치 보조금",
+      en: "Installation subsidy",
+      aliases: ["환경부 보조", "인프라 보조금"],
+      category: "reg",
+      summary: "공용·아파트 등 유형별로 설치비를 지원하는 정책입니다. 연도별 지침이 바뀝니다.",
+      body: "공용 개방 의무, 최소 운영 기간, 회수·이전 제한, 통신·관제 요건이 붙는 경우가 많습니다. 보조금에 맞춰 입지를 고르면 가동률이 낮은 사이트가 생깁니다.",
+      why: "초기 CAPEX를 낮추지만, 운영 락인과 입지 왜곡을 같이 가져옵니다. 지침 원문을 매년 다시 읽어야 합니다."
+    },
+    {
+      id: "mandate",
+      term: "의무 설치",
+      en: "Charging facility mandate",
+      aliases: ["아파트 의무", "주차면 비율", "건설 기준"],
+      category: "reg",
+      summary: "신축·일정 규모 주차시설에 충전 인프라를 일정 비율 이상 두도록 하는 규제입니다.",
+      body: "완속 위주, 고정배전 vs 콘센트형 등 세부 기준이 있습니다. 건설사·관리단·CPO의 역할 분담이 분쟁 포인트입니다.",
+      why: "아파트 시장 진입의 문이면서, 관리비·전기료 정산 갈등의 근원이기도 합니다."
+    },
+    {
+      id: "keco",
+      term: "한국환경공단 / 무공해차 누리집",
+      en: "KECO / ev.or.kr",
+      aliases: ["환경부", "ev.or.kr", "무공해차"],
+      category: "reg",
+      summary: "보조금·충전 정보·정책 안내의 공공 창구입니다.",
+      body: "충전기 위치·상태 공공데이터도 이 생태계와 맞닿아 있습니다. CPO 현황 파악의 1차 공식 출처로 삼습니다.",
+      why: "사업 계획서·대관·대외 커뮤니케이션의 기준 숫자를 여기서 맞춥니다."
+    },
+    {
+      id: "safety",
+      term: "전기안전·소방",
+      en: "Electrical safety and fire code",
+      aliases: ["전기안전관리", "소방", "절연", "누전"],
+      category: "reg",
+      summary: "수전설비, 접지, 누전차단, 소방시설, 지하주차장 설치 기준을 포괄합니다.",
+      body: "사고 한 건이 브랜드와 보험을 흔듭니다. 정기 점검 대장, 원격 누전 알람, 침수 시 차단 시나리오가 운영 매뉴얼에 들어가야 합니다.",
+      why: "투자 수익보다 먼저 막아야 할 다운사이드입니다."
+    },
+    {
+      id: "kepco-in",
+      term: "한전 인입·수전",
+      en: "Grid connection / service entrance",
+      aliases: ["인입", "수전", "한전 공사", "큐비클"],
+      category: "power",
+      summary: "한전 계통에서 사이트 수전설비까지 전기를 끌어오는 공사와 계약입니다.",
+      body: "저압/고압, 한전 부담금, 공사 기간, 변압기 위치가 일정과 CAPEX를 결정합니다. 급속 허브는 고압 수전이 흔합니다.",
+      why: "충전기 납기보다 한전 일정이 더 늦는 경우가 많습니다. 사업 크리티컬 패스입니다."
+    },
+    {
+      id: "contract-kw",
+      term: "계약전력",
+      en: "Contracted capacity",
+      aliases: ["수전용량", "kW 계약", "기본요금"],
+      category: "power",
+      summary: "한전과 약정한 최대 사용 전력(kW). 기본요금의 기준이 됩니다.",
+      body: "충전기 정격 합보다 작게 계약하고 스마트충전으로 피크를 깎는 전략이 있습니다. 반대로 너무 작으면 차단·민원이 납니다.",
+      why: "급속 사업의 고정비 핵심입니다. 가동률이 낮을수록 계약전력이 독이 됩니다."
+    },
+    {
+      id: "transformer",
+      term: "변압기 용량",
+      en: "Transformer capacity",
+      aliases: ["한전주 변압기", "단지 변압기", "TR"],
+      category: "power",
+      summary: "아파트·상가 기존 변압기가 충전 부하를 추가로 받을 수 있는지가 병목입니다.",
+      body: "실측(피크 데이터) 없이 충전기만 넣으면 트립이 납니다. 한전·전기안전 담당과 여유율을 봐야 합니다.",
+      why: "아파트 완속 사업의 기술적 상한선입니다."
+    },
+    {
+      id: "kepco-rate",
+      term: "전기차 충전전력 요금",
+      en: "EV charging electricity tariff",
+      aliases: ["특례요금", "한전 요금", "전력량요금"],
+      category: "power",
+      summary: "한전이 전기차 충전에 적용하는 전력 요금제. 기본요금·전력량·시간대 구분이 있습니다.",
+      body: "특례 일몰·개편 이력을 꼭 확인하세요. CPO 판매단가(원/kWh)는 이 원가 위에 마진·로밍 수수료·PG를 얹은 값입니다.",
+      why: "원가 구조입니다. 요금제 변경이 곧 사업 모델 변경입니다."
+    },
+    {
+      id: "tod",
+      term: "시간대별 요금 (ToU)",
+      en: "Time of Use",
+      aliases: ["경부하", "중간부하", "최대부하", "심야"],
+      category: "power",
+      summary: "시간·계절에 따라 전력량 요금이 달라지는 체계입니다.",
+      body: "심야 완속은 원가가 낮고, 오후 급속 피크는 원가가 높습니다. 고객 판매가를 고정하면 시간대별로 마진이 출렁입니다.",
+      why: "급속 피크 타임 가격 정책·멤버십 설계의 근거입니다."
+    },
+    {
+      id: "meter",
+      term: "계량·검침",
+      en: "Metering",
+      aliases: ["MID", "전력량계", "kWh 계량"],
+      category: "power",
+      summary: "충전 세션별 kWh를 법적·상업적으로 신뢰할 수 있게 재는 일입니다.",
+      body: "충전기 내장 미터, 한전 계량기, 한전 한 계량 + 하위 분배가 섞입니다. 아파트에서는 ‘공용 전기 vs 사용자 부담’ 정산이 민원 핵심입니다.",
+      why: "과금 분쟁·로밍 CDR의 원천 데이터입니다."
+    },
+    {
+      id: "tariff",
+      term: "충전 판매 요금",
+      en: "Charging tariff",
+      aliases: ["원/kWh", "회원 요금", "비회원 요금"],
+      category: "pay",
+      summary: "운전자에게 받는 요금. 보통 kWh당 단가, 때로는 시간·횟수·구독이 섞입니다.",
+      body: "회원/비회원/로밍 단가를 다르게 둡니다. 환경부·지도 앱에 노출되는 요금과 실제 청구가 다르면 민원이 폭주합니다.",
+      why: "가시 가격이 입지를 이깁니다. 투명한 요금 고지가 브랜드입니다."
+    },
+    {
+      id: "idle-fee",
+      term: "점유 요금",
+      en: "Idle / overrun fee",
+      aliases: ["오버스테이", "주차 연동", "점유과금"],
+      category: "pay",
+      summary: "충전이 끝났는데도 자리를 차지하면 받는 요금입니다.",
+      body: "급속 회전율을 위해 필요합니다. 안내 SMS, 유예 시간, 주차 단속과의 이중 부과를 설계해야 합니다.",
+      why: "급속 1기 가동률을 실질적으로 올리는 운영 레버입니다."
+    },
+    {
+      id: "rfid",
+      term: "회원카드 / RFID",
+      en: "RFID / membership card",
+      aliases: ["IR", "충전카드", "멤버십"],
+      category: "pay",
+      summary: "충전기 단말에 태그해 인증하는 카드입니다. 앱·QR·플러그앤차지와 병행됩니다.",
+      body: "로밍 카드 번호 체계, 분실 정지, 법인 카드 한도가 실무입니다. 통신 장애 시 오프라인 인증 정책도 정해야 합니다.",
+      why: "플릿·중년 운전자 층에서 앱보다 실패가 적습니다."
+    },
+    {
+      id: "pg",
+      term: "앱·신용카드 결제",
+      en: "App / card payment",
+      aliases: ["PG", "QR", "비회원 결제"],
+      category: "pay",
+      summary: "비회원이나 앱 결제로 세션을 여는 방식입니다.",
+      body: "PG 수수료, 미수, 취소·부분취소, 커넥터 점유 후 미결제 남용이 이슈입니다. 원격 시작과 결제 승인의 순서를 잘 설계해야 합니다.",
+      why: "로밍 없는 손님을 받는 최소 장치입니다."
+    },
+    {
+      id: "cdr",
+      term: "CDR",
+      en: "Charge Detail Record",
+      aliases: ["충전상세기록", "세션 기록"],
+      category: "pay",
+      summary: "한 세션의 시작·끝, kWh, 단가, 사용자, EVSE를 담은 정산 원장 레코드입니다.",
+      body: "CPO↔eMSP 대사, 고객 영수증, 세무의 원천입니다. 시계 동기화·중복 세션·중간값 유실이 분쟁을 만듭니다.",
+      why: "매출 누수와 로밍 미수가 여기서 발생합니다."
+    },
+    {
+      id: "util",
+      term: "가동률",
+      en: "Utilization",
+      aliases: ["이용률", "occupancy", "kWh/기"],
+      category: "ops",
+      summary: "설비가 실제로 돈을 번 정도. 시간 점유율 또는 기당 충전량으로 봅니다.",
+      body: "시간 가동률이 높아도 kWh가 낮을 수 있습니다(완속 점유). 반대로 초급속은 짧은 시간에 많은 kWh. KPI를 입지 유형별로 분리해야 합니다.",
+      why: "투자 회수의 단일 지표에 가깝습니다. 잘못된 KPI는 잘못된 입지를 부릅니다."
+    },
+    {
+      id: "uptime",
+      term: "가용률 (Uptime)",
+      en: "Uptime / availability",
+      aliases: ["가동가능률", "고장", "offline"],
+      category: "ops",
+      summary: "충전기가 ‘충전 가능’ 상태로 떠 있는 시간의 비율입니다.",
+      body: "통신 단절, 커넥터 파손, 결제 장애, 한전 정전을 구분해 집계해야 합니다. 지도에 계속 ‘사용가능’으로 남아 있으면 신뢰가 무너집니다.",
+      why: "로밍 파트너 SLA와 공공 보조금 운영 평가에 자주 등장합니다."
+    },
+    {
+      id: "mttr",
+      term: "MTTR / SLA",
+      en: "Mean time to repair / Service level",
+      aliases: ["출동", "복구시간", "장애대응"],
+      category: "ops",
+      summary: "고장 접수부터 복구까지 시간과, 계약으로 정한 서비스 수준입니다.",
+      body: "부품(커넥터, 모듈, 통신 모뎀) 재고와 지역 엔지니어 커버리지가 MTTR을 결정합니다.",
+      why: "급속 허브는 수 시간 다운이 매출·평판에 바로 찍힙니다."
+    },
+    {
+      id: "session",
+      term: "충전 세션",
+      en: "Charging session",
+      aliases: ["트랜잭션", "충전 건"],
+      category: "ops",
+      summary: "인증부터 종료·정산까지 한 번의 충전 이용 단위입니다.",
+      body: "실패 세션(인증만 하고 kWh 0), 강제 종료, 차량 측 컷오프를 운영 리포트에서 걸러야 합니다.",
+      why: "고객 경험과 매출 인식의 최소 단위입니다."
+    },
+    {
+      id: "power-share",
+      term: "파워 셰어링",
+      en: "Power sharing",
+      aliases: ["출력분배", "동시충전", "로드밸런싱"],
+      category: "hw",
+      summary: "한 수전 또는 한 파워모듈을 여러 커넥터가 나눠 쓰는 기능입니다.",
+      body: "200kW 장비에 두 대가 붙으면 각 100kW가 될 수 있습니다. 고객 안내(예상 kW)가 없으면 ‘느리다’는 평이 쌓입니다.",
+      why: "CAPEX 대비 면 수를 늘리는 기술. 기대 출력을 정직하게 표시해야 합니다."
+    },
+    {
+      id: "csms-remote",
+      term: "원격 시작/중지",
+      en: "Remote start / stop",
+      aliases: ["리모트 스타트", "앱 충전 시작"],
+      category: "proto",
+      summary: "CSMS가 충전기에 세션 시작·종료 명령을 보내는 기능입니다.",
+      body: "앱 결제·로밍의 기본입니다. 명령 유실·중복 시작이 커넥터 점유 장애를 만듭니다.",
+      why: "비회원·앱 중심 이용 흐름의 핵심 API입니다."
+    },
+    {
+      id: "dr",
+      term: "수요반응 (DR)",
+      en: "Demand response",
+      aliases: ["전력거래", "피크감축"],
+      category: "power",
+      summary: "계통 피크 때 충전 부하를 줄이거나 옮기고 보상을 받는 제도입니다.",
+      body: "스마트충전 제어가 전제입니다. 고객에게 ‘갑자기 느려짐’을 어떻게 알릴지가 상품 설계입니다.",
+      why: "부가 수익이지만, UX를 해치면 본업 가동률을 깎습니다."
+    },
+    {
+      id: "fleet",
+      term: "플릿 충전",
+      en: "Fleet charging",
+      aliases: ["법인", "택시", "버스", "물류"],
+      category: "role",
+      summary: "택시·버스·배송 등 상업 차량을 위한 전용·반공용 충전입니다.",
+      body: "시간표(디포 복귀), 고출력, 계정 한도, 우선권 정책이 공용과 다릅니다. 계약 단가가 안정적입니다.",
+      why: "공용 대비 예측 가능한 캐시플로. CPO 사업 초기의 앵커 수요로 쓰입니다."
+    },
+    {
+      id: "public-vs-private",
+      term: "공용 / 비공용 / 반공용",
+      en: "Public / private / semi-public",
+      aliases: ["개방형", "전용", "아파트 거주자"],
+      category: "reg",
+      summary: "누구나 쓰는 공용, 특정인만 쓰는 비공용, 시간에 따라 열리는 반공용을 나눕니다.",
+      body: "보조금·요금·로밍 가능 여부가 개방 범위에 따라 달라집니다. 지도 노출도 달라집니다.",
+      why: "입지 유형을 잘못 분류하면 지원금 환수·민원이 따라옵니다."
+    },
+    {
+      id: "kepco",
+      term: "한국전력 (KEPCO)",
+      en: "Korea Electric Power Corporation",
+      aliases: ["한전", "KEPCO"],
+      category: "power",
+      summary: "전력 공급자이자, 자체 충전 인프라를 가진 대형 플레이어입니다.",
+      body: "수전 계약 상대이면서 때로는 경쟁 CPO이기도 합니다. 지역본부 실무, 공사 일정, 요금 적용이 프로젝트 리스크입니다.",
+      why: "CPO는 한전 없이는 전기를 못 팝니다. 관계 관리가 곧 일정 관리입니다."
+    },
+    {
+      id: "map-status",
+      term: "실시간 상태",
+      en: "Charger availability status",
+      aliases: ["충전가능", "충전중", "점검중", "통신이상"],
+      category: "ops",
+      summary: "지도·앱에 뜨는 사용가능/점유/고장 값입니다. 통신 주기만큼만 ‘실시간’입니다.",
+      body: "공공 API·로밍 허브·자사 앱 상태가 서로 어긋나는 일이 잦습니다. 하트비트 주기, 캐시, 수동 점검 플래그를 운영해야 합니다.",
+      why: "틀린 상태는 고객을 허탕 치게 해 재방문이 끊깁니다."
+    },
+    {
+      id: "capex-opex",
+      term: "CAPEX / OPEX",
+      en: "Capital / operating expenditure",
+      aliases: ["설치비", "운영비", "투자비"],
+      category: "ops",
+      summary: "충전기·수전·공사 등 초기 투자와 전력·통신·출동·임대 등 운영비입니다.",
+      body: "급속은 CAPEX·기본요금이 크고, 완속은 OPEX(통신, 출동, 주차 민원)가 꾸준히 발생합니다. 보조금은 CAPEX만 가립니다.",
+      why: "손익 모델의 두 축입니다. 기당 매출만 보면 오판합니다."
+    },
+    {
+      id: "roaming-fee",
+      term: "로밍 정산·수수료",
+      en: "Roaming settlement",
+      aliases: ["중계수수료", "마크업", "정산"],
+      category: "pay",
+      summary: "다른 사업자 회원이 충전했을 때 CPO↔eMSP 사이 돈과 수수료가 오가는 과정입니다.",
+      body: "매출 인식 시점, 미수, 환율(국외 허브), VAT, 대사 주기(월)를 계약서에 명시합니다.",
+      why: "외형 충전량 대비 현금이 늦게, 적게 들어올 수 있습니다."
+    }
+  ],
+  regions: ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"],
+  operators: [
+    { id: "me", name: "환경부", type: "공공", note: "공공 보급·로밍 정책 축. 지자체·공단 설비와 맞닿아 있습니다." },
+    { id: "kepco", name: "한국전력", type: "공기업", note: "수전 계약 상대이자 자체 충전 네트워크 보유." },
+    { id: "keco", name: "한국환경공단", type: "공공", note: "보조금·통계·공공데이터 창구." },
+    { id: "sk", name: "SK일렉링크", type: "민간 CPO", note: "급속 중심 민간 네트워크. eMSP 겸업." },
+    { id: "everon", name: "에버온", type: "민간 CPO", note: "공용·아파트 등 폭넓은 운영." },
+    { id: "chargev", name: "차지비", type: "민간 CPO", note: "공용 충전·회원 서비스." },
+    { id: "pcube", name: "파워큐브", type: "민간 CPO", note: "충전기 제조·운영을 함께 하는 유형." },
+    { id: "daeyoung", name: "대영채비", type: "민간 CPO", note: "제조 기반 CPO." },
+    { id: "humax", name: "휴맥스이브이", type: "민간 CPO", note: "관제·운영." },
+    { id: "starp", name: "스타코프", type: "민간 CPO", note: "아파트·공용 운영." },
+    { id: "plugin", name: "플러그링크", type: "민간 CPO", note: "아파트 중심 운영 모델로 자주 언급." },
+    { id: "gs", name: "GS칼텍스", type: "에너지", note: "주유소 입지 기반 충전." },
+    { id: "hyundai", name: "현대 EV 충전", type: "완성차", note: "브랜드·전용·공용 혼재." },
+    { id: "tesla", name: "테슬라", type: "완성차", note: "슈퍼차저 자체 생태계." },
+    { id: "jeju", name: "제주전기자동차서비스", type: "지역", note: "제주 특화 네트워크." },
+    { id: "seoul", name: "서울시", type: "지자체", note: "시 공영·위탁 설비." }
+  ],
+  stations: [
+    { id: "st-1", name: "강남 테헤란로 공영주차장", region: "서울", city: "강남구", operator: "서울시", speed: "급속", kw: 100, connectors: "CCS2×2", status: "충전가능", address: "서울 강남구 테헤란로", note: "도심 업무지구. 점심·퇴근 피크." },
+    { id: "st-2", name: "여의도 공원 인근", region: "서울", city: "영등포구", operator: "환경부", speed: "급속", kw: 50, connectors: "CCS2·CHAdeMO", status: "충전중", address: "서울 영등포구 여의공원로", note: "주말 관광·피크닉 수요." },
+    { id: "st-3", name: "김포공항 국내선", region: "서울", city: "강서구", operator: "한국전력", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "서울 강서구 하늘길", note: "렌터·픽업 대기 수요." },
+    { id: "st-4", name: "송파 잠실 아파트 단지", region: "서울", city: "송파구", operator: "플러그링크", speed: "완속", kw: 7, connectors: "AC×12", status: "충전가능", address: "서울 송파구", note: "거주자 우선. 심야 집중." },
+    { id: "st-5", name: "분당 판교 테크노밸리", region: "경기", city: "성남시", operator: "SK일렉링크", speed: "초급속", kw: 200, connectors: "CCS2×6", status: "충전중", address: "경기 성남시 분당구", note: "직장 플릿+방문객." },
+    { id: "st-6", name: "수원 고속터미널", region: "경기", city: "수원시", operator: "차지비", speed: "급속", kw: 100, connectors: "CCS2×2", status: "점검중", address: "경기 수원시", note: "광역 이동 거점." },
+    { id: "st-7", name: "고양 스타필드 인근", region: "경기", city: "고양시", operator: "에버온", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "경기 고양시", note: "쇼핑몰 체류형." },
+    { id: "st-8", name: "인천공항 T1", region: "인천", city: "중구", operator: "한국전력", speed: "초급속", kw: 200, connectors: "CCS2×8", status: "충전가능", address: "인천 중구 공항로", note: "장거리·렌터 반납." },
+    { id: "st-9", name: "송도 국제업무단지", region: "인천", city: "연수구", operator: "SK일렉링크", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "인천 연수구", note: "업무지구 낮 시간." },
+    { id: "st-10", name: "대전 정부청사", region: "대전", city: "서구", operator: "환경부", speed: "급속", kw: 50, connectors: "CCS2×2", status: "충전가능", address: "대전 서구", note: "공공 업무 수요." },
+    { id: "st-11", name: "세종 중앙공원", region: "세종", city: "세종", operator: "환경부", speed: "완속", kw: 7, connectors: "AC×8", status: "충전가능", address: "세종특별자치시", note: "체류·산책 동선." },
+    { id: "st-12", name: "부산 해운대 공영", region: "부산", city: "해운대구", operator: "차지비", speed: "급속", kw: 100, connectors: "CCS2×3", status: "충전중", address: "부산 해운대구", note: "관광 주말 피크." },
+    { id: "st-13", name: "부산역 광장", region: "부산", city: "동구", operator: "한국전력", speed: "급속", kw: 100, connectors: "CCS2×2", status: "통신이상", address: "부산 동구", note: "KTX 연계." },
+    { id: "st-14", name: "대구 동대구역", region: "대구", city: "동구", operator: "에버온", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "대구 동구", note: "광역 환승." },
+    { id: "st-15", name: "광주 상무지구", region: "광주", city: "서구", operator: "파워큐브", speed: "급속", kw: 50, connectors: "CCS2·CHAdeMO", status: "충전가능", address: "광주 서구", note: "도심 업무." },
+    { id: "st-16", name: "울산 산업단지 입구", region: "울산", city: "남구", operator: "현대 EV 충전", speed: "초급속", kw: 350, connectors: "CCS2×4", status: "충전가능", address: "울산 남구", note: "플릿·출고 동선." },
+    { id: "st-17", name: "청주 오창", region: "충북", city: "청주시", operator: "대영채비", speed: "급속", kw: 100, connectors: "CCS2×2", status: "충전가능", address: "충북 청주시", note: "산업·물류." },
+    { id: "st-18", name: "천안 휴게(가상 거점)", region: "충남", city: "천안시", operator: "GS칼텍스", speed: "초급속", kw: 200, connectors: "CCS2×6", status: "충전중", address: "충남 천안시", note: "경부 축 경유." },
+    { id: "st-19", name: "전주 한옥마을 주차장", region: "전북", city: "전주시", operator: "환경부", speed: "완속", kw: 7, connectors: "AC×6", status: "충전가능", address: "전북 전주시", note: "관광 체류." },
+    { id: "st-20", name: "여수 엑스포", region: "전남", city: "여수시", operator: "한국전력", speed: "급속", kw: 50, connectors: "CCS2×2", status: "점검중", address: "전남 여수시", note: "주말 관광." },
+    { id: "st-21", name: "포항 영일대", region: "경북", city: "포항시", operator: "휴맥스이브이", speed: "급속", kw: 100, connectors: "CCS2×2", status: "충전가능", address: "경북 포항시", note: "해안 관광." },
+    { id: "st-22", name: "창원 산업단지", region: "경남", city: "창원시", operator: "스타코프", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "경남 창원시", note: "출퇴근 플릿." },
+    { id: "st-23", name: "강릉 경포", region: "강원", city: "강릉시", operator: "에버온", speed: "급속", kw: 100, connectors: "CCS2×3", status: "충전가능", address: "강원 강릉시", note: "주말 장거리." },
+    { id: "st-24", name: "원주 기업도시", region: "강원", city: "원주시", operator: "차지비", speed: "완속", kw: 7, connectors: "AC×10", status: "충전가능", address: "강원 원주시", note: "직장·거주." },
+    { id: "st-25", name: "제주 공항 렌터카", region: "제주", city: "제주시", operator: "제주전기자동차서비스", speed: "급속", kw: 100, connectors: "CCS2×8", status: "충전중", address: "제주 제주시", note: "렌터 EV 집중." },
+    { id: "st-26", name: "서귀포 중문", region: "제주", city: "서귀포시", operator: "제주전기자동차서비스", speed: "급속", kw: 50, connectors: "CCS2×4", status: "충전가능", address: "제주 서귀포시", note: "관광 남부 축." },
+    { id: "st-27", name: "제주 아파트 단지 샘플", region: "제주", city: "제주시", operator: "플러그링크", speed: "완속", kw: 7, connectors: "AC×20", status: "충전가능", address: "제주 제주시", note: "거주자. 풍력·관광 부하와 별개." },
+    { id: "st-28", name: "광명 이케아 인근", region: "경기", city: "광명시", operator: "테슬라", speed: "초급속", kw: 250, connectors: "NACS×12", status: "충전가능", address: "경기 광명시", note: "자체 회원 생태계." },
+    { id: "st-29", name: "하남 미사 상업지구", region: "경기", city: "하남시", operator: "GS칼텍스", speed: "급속", kw: 100, connectors: "CCS2×4", status: "충전가능", address: "경기 하남시", note: "주유소 병설형." },
+    { id: "st-30", name: "평택 항만 물류", region: "경기", city: "평택시", operator: "SK일렉링크", speed: "초급속", kw: 200, connectors: "CCS2×6", status: "충전중", address: "경기 평택시", note: "물류 플릿 앵커." }
+  ],
+  sources: [
+    { name: "무공해차 통합누리집", url: "https://www.ev.or.kr", desc: "보조금, 충전 정보, 정책 안내의 1차 창구." },
+    { name: "한국환경공단", url: "https://www.keco.or.kr", desc: "인프라 사업·공공 통계 관련 기관." },
+    { name: "공공데이터포털 (충전소 정보)", url: "https://www.data.go.kr", desc: "전기차 충전소 위치·상태 API. 활용하려면 서비스키 발급." },
+    { name: "환경부", url: "https://www.me.go.kr", desc: "보조금 지침·의무설치 등 상위 정책." },
+    { name: "한국전력", url: "https://www.kepco.co.kr", desc: "수전·전기차 충전전력 요금." },
+    { name: "국가법령정보센터", url: "https://www.law.go.kr", desc: "전기사업법 등 원문." },
+    { name: "Open Charge Alliance (OCPP)", url: "https://openchargealliance.org", desc: "OCPP 표준 문서." },
+    { name: "EVRoaming Foundation (OCPI)", url: "https://evroaming.org", desc: "OCPI 로밍 표준." }
+  ]
+};

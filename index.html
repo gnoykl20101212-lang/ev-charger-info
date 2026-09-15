@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="description" content="전기차충전기 CPO 사업을 위한 용어집과 충전기 현황 검색 정보방" />
+  <title>CPO 정보방 · 전기차충전기</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+<body data-page="home">
+  <header class="app-header" id="app-header"></header>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="kicker">Charge Point Operator desk</div>
+        <h1>CPO 사업에 필요한<br />기초 지식과 현황을 한곳에서.</h1>
+        <p class="lede">충전인프라 운영사업(CPO)을 준비할 때 반복해서 마주치는 용어, 규제, 전력, 로밍, 운영 지표를 검색하고, 지역·사업자별 충전기 샘플 현황을 살펴보는 정보방입니다.</p>
+        <form class="search-box" id="home-search">
+          <input id="home-q" type="search" placeholder="용어, 지역, 사업자, 급속/완속을 검색" autocomplete="off" />
+          <button type="submit">검색</button>
+        </form>
+        <div class="install-banner" id="install-banner">
+          <span>홈 화면에 설치하면 앱처럼 쓸 수 있습니다.</span>
+          <button class="btn" type="button" id="install-btn">설치</button>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <div class="kicker">학습 경로</div>
+        <h2 style="margin:8px 0 0;font-size:20px;">처음이면 이 순서</h2>
+        <ol id="learn-path"></ol>
+      </aside>
+    </section>
+
+    <div class="grid" id="stats"></div>
+    <div id="home-results" style="margin-top:24px"></div>
+
+    <div class="section-head">
+      <h2>바로 가기</h2>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      <a class="card" href="./glossary.html"><h3>용어집</h3><p>CPO, eMSP, OCPP, 계약전력, 가동률 등 사업을 관통하는 말들.</p></a>
+      <a class="card" href="./status.html"><h3>충전기 현황</h3><p>지역·사업자·속도·상태로 샘플 충전소를 걸러 봅니다.</p></a>
+      <a class="card" href="./sources.html"><h3>공식 출처</h3><p>환경부, 무공해차 누리집, 공공데이터, 한전, 표준 문서.</p></a>
+    </div>
+  </main>
+  <p class="footer">샘플 충전소 상태는 학습용입니다. 실제 보급 대수·실시간 가능 여부는 출처의 공식 데이터를 확인하세요. · 업데이트 2026-09</p>
+  <script src="./data/content.js?v=3"></script>
+  <script src="./js/search.js?v=3"></script>
+  <script src="./js/app.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "id": "ev-charger-info",
+  "name": "전기차충전 CPO 정보방",
+  "short_name": "CPO정보방",
+  "description": "CPO 용어집과 전기차충전기 현황 검색",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "lang": "ko",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
