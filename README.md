@@ -10,9 +10,13 @@
 
 단지 목록은 엑셀 기준 검색용입니다. 실시간 가능 여부는 출처 페이지의 기관 데이터를 따르세요.
 
+## 웹
+
+정보방 화면: <https://gnoykl20101212-lang.github.io/ev-charger-info/>
+
 ## 실행
 
-Windows에서 프로젝트 폴더의 `serve.ps1`을 실행한 뒤 브라우저에서 <http://localhost:8080> 을 엽니다.
+Windows에서 프로젝트 폴더의 `serve.ps1`을 실행한 뒤 브라우저에서 <http://127.0.0.1:8080> 을 엽니다.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\serve.ps1
