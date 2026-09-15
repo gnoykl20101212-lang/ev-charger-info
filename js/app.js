@@ -50,17 +50,6 @@
 })();
 
 function renderHome(q0) {
-  const D = window.CPO_DATA;
-  const stats = document.getElementById("stats");
-  stats.innerHTML = D.stats.map((s) =>
-    `<article class="card"><div class="stat-value">${s.value}</div><h3>${s.label}</h3><p>${s.note}</p></article>`
-  ).join("");
-
-  const path = document.getElementById("learn-path");
-  path.innerHTML = D.learningPath.map((s) =>
-    `<li><b>${s.step}. ${s.title}</b> — ${s.text}</li>`
-  ).join("");
-
   const input = document.getElementById("home-q");
   const box = document.getElementById("home-results");
   const run = () => {

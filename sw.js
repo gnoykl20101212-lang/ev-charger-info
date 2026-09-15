@@ -1,4 +1,4 @@
-const CACHE = "cpo-info-v3";
+const CACHE = "cpo-info-v6";
 const ASSETS = [
   "./",
   "./index.html",
@@ -31,6 +31,12 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    fetch(event.request)
+      .then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
+        return res;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
