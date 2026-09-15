@@ -55,7 +55,7 @@ function renderHome(q0) {
   const run = () => {
     const q = input.value.trim();
     if (!q) {
-      box.innerHTML = `<p class="hint">예: CPO, OCPP, 계약전력, 제주, 급속, 로밍</p>`;
+      box.innerHTML = `<p class="hint">예: CPO, OCPP, 헬리오시티, 송파, 스타코프</p>`;
       return;
     }
     const r = window.unifiedSearch(q);
@@ -70,21 +70,26 @@ function renderHome(q0) {
   run();
 }
 
+function esc(s) {
+  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function fmtNum(n) {
+  if (n == null || n === "") return "—";
+  return Number(n).toLocaleString("ko-KR");
+}
+
 function renderUnified(r, q) {
   const g = r.glossary.map((t) =>
-    `<a class="term" href="./glossary.html?q=${encodeURIComponent(q)}#${t.id}"><h3>${t.term}</h3><div class="meta"><span class="tag">${window.catName(t.category)}</span><span>${t.en}</span></div><p class="muted">${t.summary}</p></a>`
+    `<a class="term" href="./glossary.html?q=${encodeURIComponent(q)}#${t.id}"><h3>${esc(t.term)}</h3><div class="meta"><span class="tag">${esc(window.catName(t.category))}</span><span>${esc(t.en)}</span></div><p class="muted">${esc(t.summary)}</p></a>`
   ).join("");
-  const s = r.stations.map((st) =>
-    `<a class="term" href="./status.html?q=${encodeURIComponent(st.name)}"><h3>${st.name}</h3><div class="meta">${window.statusBadge(st.status)}<span>${st.region} · ${st.operator} · ${st.speed} ${st.kw}kW</span></div><p class="muted">${st.address} · ${st.note}</p></a>`
+  const s = (r.stations || []).map((st) =>
+    `<a class="term" href="./status.html?q=${encodeURIComponent(st.name)}"><h3>${esc(st.name)}</h3><div class="meta">${window.chargerBadge(st)}<span>${esc(st.region)} ${esc(st.city)} · ${esc(st.type)}</span></div><p class="muted">${esc(st.road || st.jibun)} · ${esc(st.operators || "CPO 없음")}</p></a>`
   ).join("");
-  const o = r.operators.map((op) =>
-    `<div class="term"><h3>${op.name}</h3><div class="meta"><span class="tag">${op.type}</span></div><p class="muted">${op.note}</p></div>`
-  ).join("");
-  if (!g && !s && !o) return `<p class="empty">‘${q}’에 대한 항목이 없습니다. 용어 또는 지역명으로 다시 검색해 보세요.</p>`;
+  if (!g && !s) return `<p class="empty">‘${esc(q)}’에 대한 항목이 없습니다. 용어 또는 단지명으로 다시 검색해 보세요.</p>`;
   return `
     ${g ? `<div class="section-head"><h2>용어</h2></div><div class="result-list">${g}</div>` : ""}
-    ${s ? `<div class="section-head"><h2>충전소</h2></div><div class="result-list">${s}</div>` : ""}
-    ${o ? `<div class="section-head"><h2>사업자</h2></div><div class="result-list">${o}</div>` : ""}`;
+    ${s ? `<div class="section-head"><h2>단지</h2></div><div class="result-list">${s}</div>` : ""}`;
 }
 
 function renderGlossary(q0, cat0) {
@@ -113,18 +118,23 @@ function renderGlossary(q0, cat0) {
       list.innerHTML = `<p class="empty">조건에 맞는 용어가 없습니다.</p>`;
       return;
     }
-    list.innerHTML = rows.map((t) => `
+    list.innerHTML = rows.map((t) => {
+      const extra = (t.body && t.body !== t.summary) ? `<p class="muted">${t.body}</p>` : "";
+      const why = t.why ? `<div class="why"><b>CPO가 기억할 점. </b>${t.why}</div>` : "";
+      const mid = t.mid ? `<span>${t.mid}</span>` : "";
+      const en = t.en ? `<span>${t.en}</span>` : "";
+      return `
       <article class="term" id="${t.id}">
         <h3>${t.term}</h3>
         <div class="meta">
           <span class="tag">${window.catName(t.category)}</span>
-          <span>${t.en}</span>
-          ${(t.aliases || []).map((a) => `<span>${a}</span>`).join("")}
+          ${en}${mid}
         </div>
-        <p>${t.summary}</p>
-        <p class="muted">${t.body}</p>
-        <div class="why"><b>CPO가 기억할 점. </b>${t.why}</div>
-      </article>`).join("");
+        <p>${t.summary || t.body || ""}</p>
+        ${extra}
+        ${why}
+      </article>`;
+    }).join("");
   };
 
   input.addEventListener("input", draw);
@@ -144,50 +154,71 @@ function renderStatus(q0) {
   const D = window.CPO_DATA;
   const q = document.getElementById("st-q");
   const region = document.getElementById("st-region");
-  const operator = document.getElementById("st-operator");
-  const speed = document.getElementById("st-speed");
-  const status = document.getElementById("st-status");
+  const type = document.getElementById("st-type");
+  const charger = document.getElementById("st-charger");
+  const pager = document.getElementById("st-pager");
+  const more = document.getElementById("st-more");
+  const PAGE = 80;
+  let limit = PAGE;
   q.value = q0;
 
-  region.innerHTML = `<option value="all">지역 전체</option>` + D.regions.map((r) => `<option>${r}</option>`).join("");
-  const ops = Array.from(new Set(D.stations.map((s) => s.operator))).sort();
-  operator.innerHTML = `<option value="all">사업자 전체</option>` + ops.map((r) => `<option>${r}</option>`).join("");
+  region.innerHTML = `<option value="all">시도 전체</option>` + (D.regions || []).map((r) => `<option>${esc(r)}</option>`).join("");
+  type.innerHTML = `<option value="all">분류 전체</option>` + (D.complexTypes || []).map((r) => `<option>${esc(r)}</option>`).join("");
 
-  const opCards = document.getElementById("operator-cards");
-  opCards.innerHTML = D.operators.map((o) =>
-    `<article class="card"><h3>${o.name}</h3><p class="stat-value" style="font-size:13px">${o.type}</p><p>${o.note}</p></article>`
-  ).join("");
+  const hasFilter = () =>
+    q.value.trim() || region.value !== "all" || type.value !== "all" || charger.value !== "all";
 
   const draw = () => {
+    const tb = document.getElementById("st-body");
+    const total = (D.stations || []).length;
+    if (!hasFilter()) {
+      document.getElementById("st-count").textContent = "전체 " + total.toLocaleString("ko-KR") + "개";
+      tb.innerHTML = `<tr><td colspan="9" class="empty">단지명·주소·CPO로 검색하거나 시도·분류를 고르세요. 한 화면에 전체를 펼치지 않습니다.</td></tr>`;
+      pager.hidden = true;
+      return;
+    }
     const rows = window.searchStations({
       q: q.value,
       region: region.value,
-      operator: operator.value,
-      speed: speed.value,
-      status: status.value
+      type: type.value,
+      charger: charger.value
     });
-    document.getElementById("st-count").textContent = rows.length + "곳";
-    const tb = document.getElementById("st-body");
+    const shown = rows.slice(0, limit);
+    document.getElementById("st-count").textContent =
+      rows.length.toLocaleString("ko-KR") + "곳" + (rows.length > shown.length ? " 중 " + shown.length.toLocaleString("ko-KR") + "곳 표시" : "");
     if (!rows.length) {
-      tb.innerHTML = `<tr><td colspan="7" class="empty">조건에 맞는 충전소가 없습니다. 샘플 데이터이므로 공식 현황은 출처 페이지를 이용하세요.</td></tr>`;
+      tb.innerHTML = `<tr><td colspan="9" class="empty">조건에 맞는 단지가 없습니다.</td></tr>`;
+      pager.hidden = true;
       return;
     }
-    tb.innerHTML = rows.map((s) => `
+    tb.innerHTML = shown.map((s) => `
       <tr>
-        <td>${s.name}</td>
-        <td>${s.region} ${s.city}</td>
-        <td>${s.operator}</td>
-        <td>${s.speed} ${s.kw}kW</td>
-        <td>${s.connectors}</td>
-        <td>${window.statusBadge(s.status)}</td>
-        <td>${s.note}</td>
+        <td>${esc(s.name)}</td>
+        <td>${esc(s.region)} ${esc(s.city)}</td>
+        <td>${esc(s.type)}</td>
+        <td>${fmtNum(s.households)}</td>
+        <td>${fmtNum(s.capacity)}</td>
+        <td>${fmtNum(s.evCars)}</td>
+        <td>${window.chargerBadge(s)}</td>
+        <td>${esc(s.operators)}</td>
+        <td>${esc(s.road || s.jibun)}</td>
       </tr>`).join("");
+    pager.hidden = rows.length <= shown.length;
   };
 
-  [q, region, operator, speed, status].forEach((el) => el.addEventListener("input", draw));
-  [region, operator, speed, status].forEach((el) => el.addEventListener("change", draw));
+  const resetDraw = () => {
+    limit = PAGE;
+    draw();
+  };
+
+  [q, region, type, charger].forEach((el) => el.addEventListener("input", resetDraw));
+  [region, type, charger].forEach((el) => el.addEventListener("change", resetDraw));
   document.getElementById("status-search").addEventListener("submit", (e) => {
     e.preventDefault();
+    resetDraw();
+  });
+  more.addEventListener("click", () => {
+    limit += PAGE;
     draw();
   });
   draw();

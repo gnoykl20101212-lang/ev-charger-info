@@ -1,3 +1,13 @@
 .cursor
 .DS_Store
 Thumbs.db
+tmp-xlsx/
+tmp-glossary.xlsx
+tmp-glossary.zip
+tmp-apt-xlsx/
+tmp-apt.xlsx
+tmp-apt.zip
+tmp-apt-rows.xml
+tmp-headers.txt
+data/_glossary.json
+data/_categories.json

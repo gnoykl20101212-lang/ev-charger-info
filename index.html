@@ -19,9 +19,9 @@
       <div>
         <div class="kicker">Charge Point Operator desk</div>
         <h1>CPO 사업에 필요한<br />기초 지식과 현황을 한곳에서.</h1>
-        <p class="lede">충전인프라 운영사업(CPO)을 준비할 때 반복해서 마주치는 용어, 규제, 전력, 로밍, 운영 지표를 검색하고, 지역·사업자별 충전기 샘플 현황을 살펴보는 정보방입니다.</p>
+        <p class="lede">충전인프라 운영사업(CPO)을 준비할 때 반복해서 마주치는 용어와 아파트 단지 충전기 현황을 검색하는 정보방입니다.</p>
         <form class="search-box" id="home-search">
-          <input id="home-q" type="search" placeholder="용어, 지역, 사업자, 급속/완속을 검색" autocomplete="off" />
+          <input id="home-q" type="search" placeholder="용어, 단지명, 주소, CPO를 검색" autocomplete="off" />
           <button type="submit">검색</button>
         </form>
         <div class="install-banner" id="install-banner">
@@ -37,14 +37,15 @@
       <h2>바로 가기</h2>
     </div>
     <div class="grid" style="grid-template-columns:repeat(3,1fr)">
-      <a class="card" href="./glossary.html"><h3>용어집</h3><p>CPO, eMSP, OCPP, 계약전력, 가동률 등 사업을 관통하는 말들.</p></a>
-      <a class="card" href="./status.html"><h3>충전기 현황</h3><p>지역·사업자·속도·상태로 샘플 충전소를 걸러 봅니다.</p></a>
+      <a class="card" href="./glossary.html"><h3>용어집</h3><p>전기차·충전기 관련 용어 v0.4. 대분류 필터와 검색.</p></a>
+      <a class="card" href="./status.html"><h3>충전기 현황</h3><p>아파트 단지 정보 v0.1. 단지명·시도·CPO 검색.</p></a>
       <a class="card" href="./sources.html"><h3>공식 출처</h3><p>환경부, 무공해차 누리집, 공공데이터, 한전, 표준 문서.</p></a>
     </div>
   </main>
-  <p class="footer">샘플 충전소 상태는 학습용입니다. 실제 보급 대수·실시간 가능 여부는 출처의 공식 데이터를 확인하세요. · 업데이트 2026-09</p>
-  <script src="./data/content.js?v=6"></script>
-  <script src="./js/search.js?v=6"></script>
-  <script src="./js/app.js?v=6"></script>
+  <p class="footer">단지 현황은 충전기 아파트 정보_v0.1.xlsx 기준입니다. 실시간 가능 여부는 출처의 공식 데이터를 확인하세요. · 업데이트 2026-09</p>
+  <script src="./data/content.js?v=9"></script>
+  <script src="./data/stations.js?v=9"></script>
+  <script src="./js/search.js?v=9"></script>
+  <script src="./js/app.js?v=9"></script>
 </body>
 </html>

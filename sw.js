@@ -1,4 +1,4 @@
-const CACHE = "cpo-info-v6";
+const CACHE = "cpo-info-v9";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,6 +9,7 @@ const ASSETS = [
   "./js/app.js",
   "./js/search.js",
   "./data/content.js",
+  "./data/stations.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./icons/icon-192.png",

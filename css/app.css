@@ -295,7 +295,12 @@ tr:hover td { background: rgba(126, 182, 255, 0.05); }
   font-size: 12px;
 }
 
-.empty { color: var(--muted); padding: 30px 8px; }
+.pager {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 8px;
+}
+.pager[hidden] { display: none; }
 
 @media (max-width: 900px) {
   .grid, .filters, .source-list { grid-template-columns: 1fr 1fr; }

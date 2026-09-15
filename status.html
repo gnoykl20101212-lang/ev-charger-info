@@ -13,52 +13,44 @@
 <body data-page="status">
   <header class="app-header" id="app-header"></header>
   <main class="wrap">
-    <div class="kicker">Network desk</div>
-    <h1>전기차충전기 현황 검색</h1>
-    <p class="lede">지역·사업자·속도·상태로 충전소를 걸러 봅니다. 아래 목록은 학습·기획용 샘플이며, 실시간 전국 현황은 무공해차 누리집·공공데이터 API를 쓰는 것이 맞습니다.</p>
+    <div class="kicker">Apartment desk</div>
+    <h1>아파트 단지 충전기 현황</h1>
+    <p class="lede">영업기획팀 자료 <b>충전기 아파트 정보 v0.1</b>를 검색합니다. 단지명·주소·CPO로 찾고, 시도·단지분류·설치 여부로 걸러 볼 수 있습니다.</p>
     <form id="status-search">
       <div class="filters">
-        <input class="field" id="st-q" type="search" placeholder="충전소명, 주소, 사업자, CCS2…" />
+        <input class="field" id="st-q" type="search" placeholder="단지명, 주소, CPO…" autocomplete="off" />
         <select id="st-region"></select>
-        <select id="st-operator"></select>
-        <select id="st-speed">
-          <option value="all">속도 전체</option>
-          <option>완속</option>
-          <option>급속</option>
-          <option>초급속</option>
+        <select id="st-type"></select>
+        <select id="st-charger">
+          <option value="all">충전기 전체</option>
+          <option value="yes">설치</option>
+          <option value="no">미설치</option>
         </select>
       </div>
-      <div class="filters" style="grid-template-columns:1fr 1fr">
-        <select id="st-status">
-          <option value="all">상태 전체</option>
-          <option>충전가능</option>
-          <option>충전중</option>
-          <option>점검중</option>
-          <option>통신이상</option>
-        </select>
-        <button class="btn" type="submit">현황 검색</button>
-      </div>
+      <button class="btn" type="submit">현황 검색</button>
     </form>
     <div class="section-head">
-      <h2>충전소</h2>
+      <h2>단지</h2>
       <span class="muted" id="st-count"></span>
     </div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>충전소</th><th>지역</th><th>사업자</th><th>속도</th><th>커넥터</th><th>상태</th><th>메모</th>
+            <th>단지명</th><th>지역</th><th>분류</th><th>세대</th><th>수전</th><th>전기차</th><th>충전기</th><th>CPO</th><th>주소</th>
           </tr>
         </thead>
         <tbody id="st-body"></tbody>
       </table>
     </div>
-    <div class="section-head"><h2>주요 사업자 맵</h2></div>
-    <div class="grid" id="operator-cards"></div>
+    <div class="pager" id="st-pager" hidden>
+      <button class="btn" type="button" id="st-more">더 보기</button>
+    </div>
   </main>
-  <p class="footer">상태값(충전가능/충전중/점검중/통신이상)은 샘플입니다. 공식 실시간 정보는 출처 페이지를 이용하세요.</p>
-  <script src="./data/content.js?v=6"></script>
-  <script src="./js/search.js?v=6"></script>
-  <script src="./js/app.js?v=6"></script>
+  <p class="footer">단지·충전기 대수는 충전기 아파트 정보_v0.1.xlsx 기준입니다. 실시간 가능 여부는 출처의 공식 데이터를 확인하세요.</p>
+  <script src="./data/content.js?v=9"></script>
+  <script src="./data/stations.js?v=9"></script>
+  <script src="./js/search.js?v=9"></script>
+  <script src="./js/app.js?v=9"></script>
 </body>
 </html>
