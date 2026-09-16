@@ -12,6 +12,7 @@
           <a href="./index.html" class="${page === "home" ? "active" : ""}">홈</a>
           <a href="./glossary.html" class="${page === "glossary" ? "active" : ""}">용어집</a>
           <a href="./status.html" class="${page === "status" ? "active" : ""}">충전기 현황</a>
+          <a href="./qa.html" class="${page === "qa" ? "active" : ""}">Q&A</a>
           <a href="./sources.html" class="${page === "sources" ? "active" : ""}">출처</a>
         </nav>
       </div>`;
@@ -46,6 +47,7 @@
   if (page === "home") renderHome(q0);
   if (page === "glossary") renderGlossary(q0, params.get("cat") || "all");
   if (page === "status") renderStatus(q0);
+  if (page === "qa" && window.renderQA) window.renderQA();
   if (page === "sources") renderSources();
 })();
 

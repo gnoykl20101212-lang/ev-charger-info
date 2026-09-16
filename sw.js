@@ -1,13 +1,16 @@
-const CACHE = "cpo-info-v9";
+const CACHE = "cpo-info-v10";
 const ASSETS = [
   "./",
   "./index.html",
   "./glossary.html",
   "./status.html",
+  "./qa.html",
   "./sources.html",
   "./css/app.css",
   "./js/app.js",
   "./js/search.js",
+  "./js/qa.js",
+  "./js/firebase-config.js",
   "./data/content.js",
   "./data/stations.js",
   "./manifest.webmanifest",
