@@ -85,7 +85,7 @@
     const toMillis = (v) => (v && typeof v.toMillis === "function" ? v.toMillis() : v || null);
     return {
       mode: "firebase",
-      subscribe(cb) {
+      subscribe(cb, onError) {
         return col.orderBy("createdAt", "desc").onSnapshot(
           (snap) => {
             const items = [];
@@ -106,6 +106,7 @@
           },
           (err) => {
             console.error("QA Firestore 구독 오류", err);
+            if (onError) onError(err);
           }
         );
       },
@@ -142,8 +143,6 @@
   }
 
   window.renderQA = function () {
-    store = initStore();
-
     const form = document.getElementById("qa-form");
     const catSel = document.getElementById("qa-category");
     const titleEl = document.getElementById("qa-title");
@@ -157,16 +156,23 @@
 
     catSel.innerHTML = CATEGORIES.map((c) => `<option>${esc(c)}</option>`).join("");
 
-    if (store.mode === "firebase") {
-      noteEl.className = "qa-note ok";
-      noteEl.innerHTML = "공유 저장소에 연결되어 있습니다. 모든 사람이 같은 Q&amp;A 목록을 봅니다.";
-    } else {
-      noteEl.className = "qa-note warn";
-      noteEl.innerHTML = "지금은 <b>이 기기(브라우저)에만</b> 저장됩니다. 여러 사람이 함께 보려면 <code>js/firebase-config.js</code>에 Firebase 설정이 필요합니다.";
-    }
+    const setNote = (mode) => {
+      if (mode === "firebase") {
+        noteEl.className = "qa-note ok";
+        noteEl.innerHTML = "공유 저장소에 연결되어 있습니다. 모든 사람이 같은 Q&amp;A 목록을 봅니다.";
+      } else if (mode === "error") {
+        noteEl.className = "qa-note warn";
+        noteEl.innerHTML = "공유 저장소에 연결하지 못해 <b>이 기기에만</b> 임시 저장합니다. Firebase 콘솔에서 Firestore Database 생성과 보안 규칙을 확인해 주세요.";
+      } else {
+        noteEl.className = "qa-note warn";
+        noteEl.innerHTML = "지금은 <b>이 기기(브라우저)에만</b> 저장됩니다. 여러 사람이 함께 보려면 <code>js/firebase-config.js</code>에 Firebase 설정이 필요합니다.";
+      }
+    };
 
     let all = [];
     let filter = "all";
+    let unsub = null;
+    let fellBack = false;
 
     const filters = [
       { id: "all", name: "전체" },
@@ -238,11 +244,31 @@
       );
     };
 
+    const useStore = (s) => {
+      if (unsub) {
+        try { unsub(); } catch (e) {}
+        unsub = null;
+      }
+      store = s;
+      setNote(s.mode);
+      unsub = s.subscribe(
+        (items) => {
+          all = items;
+          draw();
+        },
+        (err) => {
+          if (s.mode === "firebase" && !fellBack) {
+            fellBack = true;
+            console.error("공유 저장소 연결 실패 — 기기 저장으로 전환합니다.", err);
+            useStore(makeLocalStore());
+            setNote("error");
+          }
+        }
+      );
+    };
+
     drawFilter();
-    store.subscribe((items) => {
-      all = items;
-      draw();
-    });
+    useStore(initStore());
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
