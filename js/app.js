@@ -198,7 +198,7 @@ function renderStatus(q0) {
         <td>${esc(s.type)}</td>
         <td>${fmtNum(s.households)}</td>
         <td>${fmtNum(s.capacity)}</td>
-        <td>${fmtNum(s.evCars)}</td>
+        <td>${fmtNum(s.parking)}</td>
         <td>${window.chargerBadge(s)}</td>
         <td>${esc(s.operators)}</td>
         <td>${esc(s.road || s.jibun)}</td>
