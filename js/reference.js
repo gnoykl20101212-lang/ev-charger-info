@@ -12,6 +12,26 @@
   const norm = (s) => (s || "").toString().toLowerCase().replace(/\s+/g, "");
 
   window.renderArchive = function () {
+    const tabs = document.getElementById("archive-tabs");
+    const panelRef = document.getElementById("panel-ref");
+    const panelLaw = document.getElementById("panel-law");
+    const showTab = (t) => {
+      if (tabs) {
+        tabs.querySelectorAll("button").forEach((b) =>
+          b.classList.toggle("active", b.getAttribute("data-tab") === t)
+        );
+      }
+      if (panelRef) panelRef.hidden = t !== "ref";
+      if (panelLaw) panelLaw.hidden = t !== "law";
+    };
+    if (tabs) {
+      tabs.querySelectorAll("button").forEach((b) =>
+        b.addEventListener("click", () => showTab(b.getAttribute("data-tab")))
+      );
+    }
+    const params = new URLSearchParams(location.search);
+    showTab(params.get("tab") === "law" ? "law" : "ref");
+
     const R = window.CPO_REFERENCE || { items: [] };
     const items = Array.isArray(R.items) ? R.items : [];
     const input = document.getElementById("ref-q");

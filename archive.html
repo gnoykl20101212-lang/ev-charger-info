@@ -15,33 +15,42 @@
   <main class="wrap">
     <div class="kicker">Archive</div>
     <h1>충전기 자료실</h1>
-    <p class="lede">기준정보를 검색해 확인하고, 법령·지침규정·가이드라인 원문을 바로 여세요.</p>
+    <p class="lede">확인할 자료를 선택하세요. 기준정보를 검색하거나, 법령·지침규정·가이드라인 원문을 열 수 있습니다.</p>
 
-    <div class="section-head">
-      <h2>기준정보</h2>
-      <span class="muted" id="ref-count"></span>
+    <div class="chips" id="archive-tabs">
+      <button type="button" class="chip active" data-tab="ref">기준정보</button>
+      <button type="button" class="chip" data-tab="law">법령 / 지침규정 / 가이드라인</button>
     </div>
-    <div id="ref-note" class="qa-note"></div>
-    <form class="search-box" id="ref-search">
-      <input id="ref-q" type="search" placeholder="기준자료 제목·구분·내용 검색" autocomplete="off" />
-      <button type="submit">검색</button>
-    </form>
-    <div class="term-list" id="ref-list" style="margin-top:14px"></div>
 
-    <div class="section-head">
-      <h2>법령 / 지침규정 / 가이드라인</h2>
-    </div>
-    <div class="grid" style="grid-template-columns:repeat(2,1fr)">
-      <a class="card" href="https://ev.or.kr/nportal/infoGarden/initGuideAction.do" target="_blank" rel="noopener">
-        <h3>법령 · 지침규정 · 가이드라인</h3>
-        <p>충전 인프라 관련 법령과 지침, 가이드라인 원문을 확인합니다.</p>
-        <p class="muted">ev.or.kr · 정보마당</p>
-      </a>
-    </div>
+    <section id="panel-ref" class="archive-panel">
+      <div class="section-head">
+        <h2>기준정보</h2>
+        <span class="muted" id="ref-count"></span>
+      </div>
+      <div id="ref-note" class="qa-note"></div>
+      <form class="search-box" id="ref-search">
+        <input id="ref-q" type="search" placeholder="기준자료 제목·구분·내용 검색" autocomplete="off" />
+        <button type="submit">검색</button>
+      </form>
+      <div class="term-list" id="ref-list" style="margin-top:14px"></div>
+    </section>
+
+    <section id="panel-law" class="archive-panel" hidden>
+      <div class="section-head">
+        <h2>법령 / 지침규정 / 가이드라인</h2>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+        <a class="card" href="https://ev.or.kr/nportal/infoGarden/initGuideAction.do" target="_blank" rel="noopener">
+          <h3>법령 · 지침규정 · 가이드라인</h3>
+          <p>충전 인프라 관련 법령과 지침, 가이드라인 원문을 확인합니다.</p>
+          <p class="muted">ev.or.kr · 정보마당</p>
+        </a>
+      </div>
+    </section>
   </main>
   <p class="footer">기준정보는 별도 기준자료(워드파일)를 기준으로 하며, 법령·지침 원문은 무공해차 통합누리집(ev.or.kr)에서 확인하세요.</p>
   <script src="./data/reference.js?v=13"></script>
-  <script src="./js/reference.js?v=11"></script>
+  <script src="./js/reference.js?v=14"></script>
   <script src="./js/app.js?v=11"></script>
 </body>
 </html>
