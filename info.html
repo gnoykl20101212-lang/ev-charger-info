@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>충전기 정보 · CPO 정보방</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="./css/app.css?v=11" />
+</head>
+<body data-page="info">
+  <header class="app-header" id="app-header"></header>
+  <main class="wrap">
+    <div class="kicker">Charger Info</div>
+    <h1>충전기 정보</h1>
+    <p class="lede">완속충전기 제품과 충전 요금을 무공해차 통합누리집에서 바로 확인하세요.</p>
+    <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+      <a class="card" href="https://ev.or.kr/nportal/buySupprt/initFireChargerAction.do" target="_blank" rel="noopener">
+        <h3>완속충전기 제품 검색</h3>
+        <p>무공해차 통합누리집에서 완속충전기 제품을 검색합니다.</p>
+        <p class="muted">ev.or.kr · 무공해차 통합누리집</p>
+      </a>
+      <a class="card" href="https://ev.or.kr/nportal/evcarInfo/initEvcarChargeSimulator.do" target="_blank" rel="noopener">
+        <h3>충전 요금 비교</h3>
+        <p>전기차 충전 요금을 비교하고 모의 계산합니다.</p>
+        <p class="muted">ev.or.kr · 충전요금 시뮬레이터</p>
+      </a>
+    </div>
+  </main>
+  <p class="footer">외부 링크는 무공해차 통합누리집(ev.or.kr)으로 연결됩니다. 실시간 정보는 해당 사이트를 기준으로 하세요.</p>
+  <script src="./js/app.js?v=11"></script>
+</body>
+</html>
