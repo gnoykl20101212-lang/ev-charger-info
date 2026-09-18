@@ -1,4 +1,4 @@
-const CACHE = "cpo-info-v11";
+const CACHE = "cpo-info-v12";
 const ASSETS = [
   "./",
   "./index.html",
