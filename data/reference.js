@@ -48,7 +48,7 @@ window.CPO_REFERENCE = {
       title: "충전 소켓(커넥터) 종류",
       category: "소켓",
       content:
-        "현재 전기차 충전기 커넥터는 완속 AC 5핀, 급속 DC콤보를 기본으로 사용.\n\n· Type 1(J1772): 완속\n· DC콤보: 급속\n· CHAdeMO: 완속\n· 테슬라: 급속"
+        "현재 전기차 충전기 커넥터는 완속 AC 5핀, 급속 DC콤보를 기본으로 사용.\n\n· Type 1(J1772): 완속\n· DC콤보: 급속\n· CHAdeMO: 급속\n· 테슬라: 급속"
     }
   ]
 };
