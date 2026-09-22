@@ -14,6 +14,7 @@
           <a href="./info.html" class="${page === "info" ? "active" : ""}">충전기 정보</a>
           <a href="./archive.html" class="${page === "archive" ? "active" : ""}">충전기 자료실</a>
           <a href="./status.html" class="${page === "status" ? "active" : ""}">충전기 현황</a>
+          <a href="./faq.html" class="${page === "faq" ? "active" : ""}">FAQ</a>
           <a href="./qa.html" class="${page === "qa" ? "active" : ""}">정보수정요청</a>
           <a href="./sources.html" class="${page === "sources" ? "active" : ""}">출처</a>
         </nav>
@@ -50,6 +51,7 @@
   if (page === "glossary") renderGlossary(q0, params.get("cat") || "all");
   if (page === "status") renderStatus(q0);
   if (page === "archive" && window.renderArchive) window.renderArchive();
+  if (page === "faq" && window.renderFAQ) window.renderFAQ();
   if (page === "qa" && window.renderQA) window.renderQA();
   if (page === "sources") renderSources();
 })();
