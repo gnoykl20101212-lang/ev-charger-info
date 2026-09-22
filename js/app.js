@@ -14,7 +14,7 @@
           <a href="./info.html" class="${page === "info" ? "active" : ""}">충전기 정보</a>
           <a href="./archive.html" class="${page === "archive" ? "active" : ""}">충전기 자료실</a>
           <a href="./status.html" class="${page === "status" ? "active" : ""}">충전기 현황</a>
-          <a href="./qa.html" class="${page === "qa" ? "active" : ""}">Q&A</a>
+          <a href="./qa.html" class="${page === "qa" ? "active" : ""}">정보수정요청</a>
           <a href="./sources.html" class="${page === "sources" ? "active" : ""}">출처</a>
         </nav>
       </div>`;

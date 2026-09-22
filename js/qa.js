@@ -159,7 +159,7 @@
     const setNote = (mode) => {
       if (mode === "firebase") {
         noteEl.className = "qa-note ok";
-        noteEl.innerHTML = "공유 저장소에 연결되어 있습니다. 모든 사람이 같은 Q&amp;A 목록을 봅니다.";
+        noteEl.innerHTML = "공유 저장소에 연결되어 있습니다. 모든 사람이 같은 정보수정요청 목록을 봅니다.";
       } else if (mode === "error") {
         noteEl.className = "qa-note warn";
         noteEl.innerHTML = "공유 저장소에 연결하지 못해 <b>이 기기에만</b> 임시 저장합니다. Firebase 콘솔에서 Firestore Database 생성과 보안 규칙을 확인해 주세요.";
