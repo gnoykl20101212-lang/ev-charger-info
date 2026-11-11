@@ -56,25 +56,31 @@
       .join("");
   }
 
-  function localCounts(keys, doIncrement) {
-    let store = {};
+  function readLocalStore() {
     try {
-      store = JSON.parse(localStorage.getItem(LOCAL_STORE) || "{}");
+      return JSON.parse(localStorage.getItem(LOCAL_STORE) || "{}");
     } catch (e) {
-      store = {};
+      return {};
     }
-    if (doIncrement) {
-      ["day", "week", "month", "year"].forEach((k) => {
-        store[keys[k]] = (store[keys[k]] || 0) + 1;
-      });
-      localStorage.setItem(LOCAL_STORE, JSON.stringify(store));
-    }
+  }
+  function pick(store, keys) {
     return {
       day: store[keys.day] || 0,
       week: store[keys.week] || 0,
       month: store[keys.month] || 0,
       year: store[keys.year] || 0
     };
+  }
+  function localRead(keys) {
+    return pick(readLocalStore(), keys);
+  }
+  function localBump(keys) {
+    const store = readLocalStore();
+    ["day", "week", "month", "year"].forEach((k) => {
+      store[keys[k]] = (store[keys[k]] || 0) + 1;
+    });
+    localStorage.setItem(LOCAL_STORE, JSON.stringify(store));
+    return pick(store, keys);
   }
 
   async function firebaseCounts(keys, doIncrement) {
@@ -106,22 +112,21 @@
     const keys = keysFor(now);
     const doIncrement = localStorage.getItem(DAY_GUARD) !== keys.day;
 
-    render(container, { day: "–", week: "–", month: "–", year: "–" });
+    // 즉시 로컬 값으로 표시(빈 화면/지연 방지), 공유 집계가 오면 덮어씀
+    render(container, doIncrement ? localBump(keys) : localRead(keys));
 
     try {
       if (firebaseReady()) {
         const vals = await firebaseCounts(keys, doIncrement);
-        if (doIncrement) localStorage.setItem(DAY_GUARD, keys.day);
         render(container, vals);
+        localStorage.setItem(DAY_GUARD, keys.day);
         return;
       }
     } catch (e) {
       console.warn("방문자 수 공유 집계 실패 — 로컬 집계로 표시합니다.", e);
     }
 
-    const vals = localCounts(keys, doIncrement);
-    if (doIncrement) localStorage.setItem(DAY_GUARD, keys.day);
-    render(container, vals);
+    localStorage.setItem(DAY_GUARD, keys.day);
   };
 
   if (document.readyState !== "loading") window.renderVisitors();
