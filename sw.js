@@ -1,4 +1,4 @@
-const CACHE = "cpo-info-v18";
+const CACHE = "cpo-info-v19";
 const ASSETS = [
   "./",
   "./index.html",
@@ -15,6 +15,7 @@ const ASSETS = [
   "./js/reference.js",
   "./js/faq.js",
   "./js/qa.js",
+  "./js/visitors.js",
   "./js/firebase-config.js",
   "./data/content.js",
   "./data/stations.js",

@@ -10,11 +10,12 @@
   <link rel="icon" href="./icons/icon.svg?v=18" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png?v=18" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-  <link rel="stylesheet" href="./css/app.css?v=16" />
+  <link rel="stylesheet" href="./css/app.css?v=19" />
 </head>
 <body data-page="home">
   <header class="app-header" id="app-header"></header>
   <main class="wrap">
+    <div class="visitor-stats" id="visitor-stats" aria-label="방문자 수"></div>
     <section class="hero">
       <div>
         <div class="kicker">Charge Point Operator desk</div>
@@ -44,9 +45,13 @@
     </div>
   </main>
   <p class="footer">단지 현황은 충전기 아파트 정보_v0.1.xlsx 기준입니다. 실시간 가능 여부는 출처의 공식 데이터를 확인하세요. · 업데이트 2026-09</p>
-  <script src="./data/content.js?v=16"></script>
-  <script src="./data/stations.js?v=16"></script>
-  <script src="./js/search.js?v=16"></script>
-  <script src="./js/app.js?v=16"></script>
+  <script src="./js/firebase-config.js?v=19"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="./data/content.js?v=19"></script>
+  <script src="./data/stations.js?v=19"></script>
+  <script src="./js/search.js?v=19"></script>
+  <script src="./js/visitors.js?v=19"></script>
+  <script src="./js/app.js?v=19"></script>
 </body>
 </html>
