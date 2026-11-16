@@ -78,11 +78,15 @@
           const link = it.url
             ? `<p class="muted"><a href="${esc(it.url)}" target="_blank" rel="noopener">원문 열기</a></p>`
             : "";
+          const img = it.image
+            ? `<a href="${esc(it.image)}" target="_blank" rel="noopener"><img class="ref-img" src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy" /></a>`
+            : "";
           return `
         <article class="term">
           ${meta}
           <h3>${esc(it.title)}</h3>
           <p>${nl2br(it.content || "")}</p>
+          ${img}
           ${link}
         </article>`;
         })

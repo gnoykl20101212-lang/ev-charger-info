@@ -1,4 +1,4 @@
-const CACHE = "cpo-info-v20";
+const CACHE = "cpo-info-v21";
 const ASSETS = [
   "./",
   "./index.html",
@@ -21,6 +21,7 @@ const ASSETS = [
   "./data/stations.js",
   "./data/reference.js",
   "./data/faq.js",
+  "./assets/g-type-meter.png",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./icons/icon-192.png",

@@ -391,6 +391,16 @@ tr:hover td { background: rgba(126, 182, 255, 0.05); }
 .qa-item.is-done { opacity: 0.82; }
 .qa-item.is-done h3 { color: var(--muted); }
 
+.ref-img {
+  display: block;
+  max-width: 420px;
+  width: 100%;
+  height: auto;
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
 @media (max-width: 620px) {
   .qa-form-row { grid-template-columns: 1fr; }
 }
