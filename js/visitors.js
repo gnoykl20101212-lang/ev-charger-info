@@ -27,7 +27,7 @@
       day: `d-${y}-${m}-${day}`,
       week: `w-${isoWeek(d)}`,
       month: `m-${y}-${m}`,
-      year: `y-${y}`
+      total: "t-all"
     };
   }
 
@@ -46,7 +46,7 @@
       ["일", vals.day],
       ["주간", vals.week],
       ["월간", vals.month],
-      ["연간누적", vals.year]
+      ["총누적", vals.total]
     ];
     container.innerHTML = row
       .map(([label, n]) => {
@@ -68,7 +68,7 @@
       day: store[keys.day] || 0,
       week: store[keys.week] || 0,
       month: store[keys.month] || 0,
-      year: store[keys.year] || 0
+      total: store[keys.total] || 0
     };
   }
   function localRead(keys) {
@@ -76,7 +76,7 @@
   }
   function localBump(keys) {
     const store = readLocalStore();
-    ["day", "week", "month", "year"].forEach((k) => {
+    ["day", "week", "month", "total"].forEach((k) => {
       store[keys[k]] = (store[keys[k]] || 0) + 1;
     });
     localStorage.setItem(LOCAL_STORE, JSON.stringify(store));
@@ -92,16 +92,16 @@
       const inc = firebase.firestore.FieldValue.increment(1);
       const ts = firebase.firestore.FieldValue.serverTimestamp();
       await Promise.all(
-        ["day", "week", "month", "year"].map((k) =>
+        ["day", "week", "month", "total"].map((k) =>
           col.doc(keys[k]).set({ count: inc, updatedAt: ts }, { merge: true })
         )
       );
     }
     const snaps = await Promise.all(
-      ["day", "week", "month", "year"].map((k) => col.doc(keys[k]).get())
+      ["day", "week", "month", "total"].map((k) => col.doc(keys[k]).get())
     );
     const val = (s) => (s.exists && s.data().count ? s.data().count : 0);
-    return { day: val(snaps[0]), week: val(snaps[1]), month: val(snaps[2]), year: val(snaps[3]) };
+    return { day: val(snaps[0]), week: val(snaps[1]), month: val(snaps[2]), total: val(snaps[3]) };
   }
 
   window.renderVisitors = async function () {
